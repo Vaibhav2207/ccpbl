@@ -1,9 +1,17 @@
-FROM openjdk:8-jdk-alpine
-EXPOSE 8080
+# Use an official lightweight Node.js image
+FROM node:alpine
+
+# Set the working directory to /app
 WORKDIR /app
 
-COPY . .
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-RUN javac first.java
+# Install any dependencies
+RUN npm install
 
-CMD ["java", "first"]
+# Set the command to start the server
+CMD ["npm", "start"]
+
+# Expose port 8080 for the application to listen on
+EXPOSE 8080
