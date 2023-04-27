@@ -1,24 +1,23 @@
-name: Build and Push Docker Image
+name: Deploy to Docker Hub
 
 on:
   push:
     branches:
-      - main
-
-env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - deploy
 
 jobs:
-  build-and-push:
+  deploy:
+    name: Deploy HTML to Docker
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Build Docker image
-      run: |
-        docker build -t my-image-name .
-    - name: Push Docker image
-      run: |
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        docker tag my-image-name $DOCKER_USERNAME/my-image-name
-        docker push $DOCKER_USERNAME/my-image-name
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: your-docker-username/html-app:latest
+
